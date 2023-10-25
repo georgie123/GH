@@ -1,36 +1,45 @@
 
-########################### Api Wikipedia exemple choix au hasard
+########################### Api Wikipedia exemple choix testé
 import wikipedia
-import random
 
-wikipedia.set_lang("fr")
+import warnings
+warnings.catch_warnings()
+warnings.simplefilter('ignore')
+
+wikipedia.set_lang('fr')
+
+chercher = 'aiguille dibona'
+chaineTemoin = 'Massif des Écrins'
+numberPhrase = 2
 
 myWikiContent = ''
 
+print('\nChercher :', chercher)
 try:
-    myWikiContent = wikipedia.summary("L'Ourson", sentences=3)
+    myWikiContent = wikipedia.summary(chercher, sentences=numberPhrase)
+
+    # Vérifier la pertinence du résultat
+    if str(chaineTemoin).lower() in str(myWikiContent).lower():
+        pass
+
+    else:
+        myWikiContent = 'Pas pertinent !!!'
 
 # Gestion des DisambiguationErrors
 except wikipedia.DisambiguationError as e:
-    print('\nAttention : DisambiguationError !')
-    # print(str(e))
-    # print(e.options)
-
-    print(e)
-
+    # print('\nAttention : 1ère DisambiguationError!')
     for p in e.options:
-        print('p : ' + p)
-
+        # print('Option testée : ' + p)
         try:
-            myWikiContent = wikipedia.summary(p)
+            myWikiContent = wikipedia.summary(p, sentences=numberPhrase)
+            # Vérifier la pertinence du résultat
+            if str(chaineTemoin).lower() in str(myWikiContent).lower():
+                pass
+            if not str(chaineTemoin).lower() in str(myWikiContent).lower():
+                myWikiContent = 'Pas pertinent !!!'
+
         except wikipedia.DisambiguationError as e:
-            print('\nAttention : DisambiguationError !')
+            # print('\nAttention : 2ème DisambiguationError!')
+            myWikiContent = 'Pas pertinent !!!'
 
-# Vérifier la pertinence du resultat si pas de DisambiguationError
-if str('Massif des Écrins').lower() in str(myWikiContent).lower():
-    pass
-
-else:
-    myWikiContent = 'Pas pertinent !!!'
-
-print('\nmyWikiContent : ' + str(myWikiContent))
+print(str(myWikiContent))
