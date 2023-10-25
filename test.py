@@ -5,18 +5,21 @@ API WIKIPEDIA COMPLET :
 - On récupère les homonymes selon Wikipédia
 - On lance la recherche sur les homonymes
 - On teste les résultats
+- On mets en forme le résultat final
 """
 
 import wikipedia
 import requests
 import warnings
+import re
+
 warnings.catch_warnings()
 warnings.simplefilter('ignore')
 
 wikipedia.set_lang('fr')
 
 # On précise ici la chaîne à chercher car on l'utilisera sans doute plusieurs fois
-chercherMot = 'meije'
+chercherMot = "Grand Pic de la Meije"
 
 # Chaîne pour aider à trouver l'article
 aide = 'montagne'
@@ -27,15 +30,19 @@ chaineTemoin = 'Massif des Écrins'
 
 # Nombre de phrases à récupérer
 # On le précise ici car on l'utilisera sans doute plusieurs fois
-numberPhrase = 3
+numberPhrase = 10
 
-myWikiContent = 'Pas pertinent 0 !'
+# Nombre de lettres à récupérer
+numberLetter = 500
+
+myWikiContent = 'Pas pertinent'
 
 if chercherMot != '' and chercherMot != None :
 
     chercher = aide + ' ' + chercherMot
 
     print('\nChercher :', chercher)
+
     try:
         myWikiContent = wikipedia.summary(chercher, sentences=numberPhrase)
 
@@ -44,13 +51,13 @@ if chercherMot != '' and chercherMot != None :
             pass
 
         else:
-            myWikiContent = 'Pas pertinent 1 !'
+            myWikiContent = 'Pas pertinent'
 
     except wikipedia.exceptions.PageError as e:
-        myWikiContent = 'Pas trouvé 1 !'
+        myWikiContent = 'Pas pertinent'
 
     except requests.exceptions.ConnectionError as e:
-        myWikiContent = 'Pas trouvé 3 !'
+        myWikiContent = 'Pas pertinent'
 
     # Gestion des DisambiguationErrors
     except wikipedia.DisambiguationError as e:
@@ -62,24 +69,31 @@ if chercherMot != '' and chercherMot != None :
                 if str(chaineTemoin).lower() in str(myWikiContent).lower():
                     pass
                 if not str(chaineTemoin).lower() in str(myWikiContent).lower():
-                    myWikiContent = 'Pas pertinent 2 !'
+                    myWikiContent = 'Pas pertinent'
 
             except wikipedia.DisambiguationError as e:
-                myWikiContent = 'Pas pertinent 3 !'
+                myWikiContent = 'Pas pertinent'
 
             except wikipedia.exceptions.PageError as e:
-                myWikiContent = 'Pas trouvé 2 !'
+                myWikiContent = 'Pas pertinent'
 
             except requests.exceptions.ConnectionError as e:
-                myWikiContent = 'Pas trouvé 4 !'
+                myWikiContent = 'Pas pertinent'
 
-    import re
+    # Mise en forme du résultat
+    myWikiContent = re.sub('==(.+)==', '', myWikiContent)
+    myWikiContent = re.sub('\n\n', '\n', myWikiContent)
+    myWikiContent = re.sub('\n\n', '\n', myWikiContent)
 
-    myWikiContent = myWikiContent.split('==')[0]
+    myWikiContent = re.sub('\. ', '.\n', myWikiContent)
 
-    myWikiContent = myWikiContent.replace('\n\n', '')
+    myWikiContent = re.sub('\[réf\.\n', ' [réf. ', myWikiContent)
 
-    myWikiContent = myWikiContent.replace('. ', '\n')
+    # Raccourcissement du résultat
+    if len(myWikiContent) > numberLetter:
+        myWikiContent = myWikiContent[:numberLetter] + '...'
 
-    print('\n' + str(myWikiContent))
-    print('fin')
+        print('\n' + str(myWikiContent))
+
+    if len(myWikiContent) < numberLetter:
+        print('\n' + str(myWikiContent))
