@@ -1,13 +1,3 @@
-"""
-API WIKIPEDIA COMPLET :
-- On aide la recherche
-- On teste son résultat
-- On récupère les homonymes selon Wikipédia
-- On lance la recherche sur les homonymes
-- On teste les résultats
-- On mets en forme le résultat final
-"""
-
 import wikipedia
 import requests
 import warnings
