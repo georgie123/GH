@@ -27,10 +27,8 @@ numberLetter = 500
 
 myWikiContent = 'Pas pertinent'
 
-if chercherMot != '' and chercherMot != None :
-
+if chercherMot != '' and chercherMot != None:
     chercher = aide + ' ' + chercherMot
-
     print('\nChercher :', chercher)
 
     try:
@@ -58,6 +56,7 @@ if chercherMot != '' and chercherMot != None :
                 # Vérifier la pertinence du résultat
                 if str(chaineTemoin).lower() in str(myWikiContent).lower():
                     pass
+
                 if not str(chaineTemoin).lower() in str(myWikiContent).lower():
                     myWikiContent = 'Pas pertinent'
 
@@ -76,7 +75,6 @@ if chercherMot != '' and chercherMot != None :
     myWikiContent = re.sub('\n\n', '\n', myWikiContent)
 
     myWikiContent = re.sub('\. ', '.\n', myWikiContent)
-
     myWikiContent = re.sub('\[réf\.\n', ' [réf. ', myWikiContent)
 
     # Raccourcissement du résultat
