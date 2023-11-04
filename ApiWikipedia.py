@@ -62,7 +62,7 @@ if chercherMot != '' and chercherMot != None :
     # Gestion des DisambiguationErrors
     except wikipedia.DisambiguationError as e:
         for p in e.options:
-            # print('Option testée : ' + p)
+            print('Option testée : ' + p)
             try:
                 myWikiContent = wikipedia.summary(p, sentences=numberPhrase)
 

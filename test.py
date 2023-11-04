@@ -1,13 +1,3 @@
-"""
-API WIKIPEDIA COMPLET :
-- On aide la recherche
-- On teste son résultat
-- On récupère les homonymes selon Wikipédia
-- On lance la recherche sur les homonymes
-- On teste les résultats
-- On mets en forme le résultat final
-"""
-
 import wikipedia
 import requests
 import warnings
@@ -19,10 +9,10 @@ warnings.simplefilter('ignore')
 wikipedia.set_lang('fr')
 
 # On précise ici la chaîne à chercher car on l'utilisera sans doute plusieurs fois
-chercherMot = "Grand Pic de la Meije"
+chercherMot = "l'ourson"
 
 # Chaîne pour aider à trouver l'article
-aide = 'montagne'
+aide = ''
 
 # Chaîne pour vérification du résultat
 # On la précise ici car on l'utilisera sans doute plusieurs fois
@@ -38,9 +28,7 @@ numberLetter = 500
 myWikiContent = 'Pas pertinent'
 
 if chercherMot != '' and chercherMot != None :
-
     chercher = aide + ' ' + chercherMot
-
     print('\nChercher :', chercher)
 
     try:
@@ -50,7 +38,7 @@ if chercherMot != '' and chercherMot != None :
         if str(chaineTemoin).lower() in str(myWikiContent).lower():
             pass
 
-        if not str(chaineTemoin).lower() in str(myWikiContent).lower():
+        else:
             myWikiContent = 'Pas pertinent'
 
     except wikipedia.exceptions.PageError as e:
@@ -62,7 +50,8 @@ if chercherMot != '' and chercherMot != None :
     # Gestion des DisambiguationErrors
     except wikipedia.DisambiguationError as e:
         for p in e.options:
-            # print('Option testée : ' + p)
+            print('Option testée : ' + p)
+
             try:
                 myWikiContent = wikipedia.summary(p, sentences=numberPhrase)
 
@@ -88,7 +77,6 @@ if chercherMot != '' and chercherMot != None :
     myWikiContent = re.sub('\n\n', '\n', myWikiContent)
 
     myWikiContent = re.sub('\. ', '.\n', myWikiContent)
-
     myWikiContent = re.sub('\[réf\.\n', ' [réf. ', myWikiContent)
 
     # Raccourcissement du résultat
