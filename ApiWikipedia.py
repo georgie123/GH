@@ -50,7 +50,7 @@ if chercherMot != '' and chercherMot != None :
         if str(chaineTemoin).lower() in str(myWikiContent).lower():
             pass
 
-        else:
+        if not str(chaineTemoin).lower() in str(myWikiContent).lower():
             myWikiContent = 'Pas pertinent'
 
     except wikipedia.exceptions.PageError as e:
@@ -65,9 +65,11 @@ if chercherMot != '' and chercherMot != None :
             # print('Option testée : ' + p)
             try:
                 myWikiContent = wikipedia.summary(p, sentences=numberPhrase)
+
                 # Vérifier la pertinence du résultat
                 if str(chaineTemoin).lower() in str(myWikiContent).lower():
-                    pass
+                    break
+
                 if not str(chaineTemoin).lower() in str(myWikiContent).lower():
                     myWikiContent = 'Pas pertinent'
 
